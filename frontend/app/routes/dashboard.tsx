@@ -23,10 +23,10 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto pb-8">
+      <h1 className="text-3xl font-bold">Dashboard</h1>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Handover Tasks</h1>
-        <Link to="/tasks/new">
+        <Link className="self-end" to="/tasks/new">
           <Button>Create New Task</Button>
         </Link>
       </div>
@@ -42,8 +42,7 @@ export default function Dashboard() {
                 <TableHead>Title</TableHead>
                 <TableHead>Assignee</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Links</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -52,14 +51,7 @@ export default function Dashboard() {
                   <TableCell>{task.title}</TableCell>
                   <TableCell>{task.assignee}</TableCell>
                   <TableCell>{task.status}</TableCell>
-                  <TableCell>
-                    {task.links.map((link) => (
-                      <span key={link} className="mr-2">
-                        {link}
-                      </span>
-                    ))}
-                  </TableCell>
-                  <TableCell>
+                  <TableCell className="text-right">
                     <Link to={`/tasks/${task.id}`}>
                       <Button variant="outline" size="sm">
                         View Details
