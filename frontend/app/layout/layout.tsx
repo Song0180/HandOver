@@ -16,6 +16,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb";
+import { ModeToggle } from "~/components/mode-toggle";
 
 export default function Layout() {
   return (
@@ -36,6 +37,13 @@ export default function Layout() {
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
+            <div className="ml-auto flex items-center gap-2">
+              <Separator
+                orientation="vertical"
+                className="mr-2 data-[orientation=vertical]:h-4"
+              />
+              <ModeToggle />
+            </div>
           </header>
           <div className="flex flex-1 flex-col gap-4 p-4">
             <Outlet />

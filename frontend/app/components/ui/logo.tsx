@@ -10,17 +10,20 @@ export function Logo() {
         text-3xl 
         tracking-tight 
         bg-gradient-to-r 
-        from-pink-300 
-        via-purple-300 
-        to-yellow-300 
+        from-violet-300 
+        via-red-300
+        to-orange-300 
+        dark:from-violet-500 
+        dark:via-red-500 
+        dark:to-orange-500 
         bg-clip-text 
         text-transparent 
         transition-all 
         duration-300
         hover:scale-105
-        hover:tracking-wide
         text-shadow-lg
-        text-shadow-pink-200/30
+        text-shadow-red-200/20
+        dark:text-shadow-red-100/10
       "
       >
         HandOver
