@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 
 import { ThemeProvider } from "~/components/theme-provider";
 import {
@@ -19,6 +19,29 @@ import {
 import { ModeToggle } from "~/components/mode-toggle";
 
 export default function Layout() {
+  const location = useLocation();
+
+  const getBreadcrumbs = () => {
+    const paths = location.pathname.split("/").filter((path) => path);
+    let currentPath = "";
+
+    return paths.map((path, index) => {
+      currentPath += `/${path}`;
+      const formattedPath = path.charAt(0).toUpperCase() + path.slice(1);
+
+      return (
+        <BreadcrumbItem key={currentPath}>
+          {index === paths.length - 1 ? (
+            <BreadcrumbPage>{formattedPath}</BreadcrumbPage>
+          ) : (
+            <BreadcrumbLink href={currentPath}>{formattedPath}</BreadcrumbLink>
+          )}
+          {index < paths.length - 1 && <BreadcrumbSeparator />}
+        </BreadcrumbItem>
+      );
+    });
+  };
+
   return (
     <ThemeProvider defaultTheme="system" storageKey="handover-theme">
       <SidebarProvider>
@@ -32,9 +55,7 @@ export default function Layout() {
             />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
-                </BreadcrumbItem>
+                {location.pathname !== "/" && getBreadcrumbs()}
               </BreadcrumbList>
             </Breadcrumb>
             <div className="ml-auto flex items-center gap-2">
@@ -47,12 +68,6 @@ export default function Layout() {
           </header>
           <div className="flex flex-1 flex-col gap-4 p-4">
             <Outlet />
-            <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-              <div className="bg-muted/50 aspect-video rounded-xl" />
-              <div className="bg-muted/50 aspect-video rounded-xl" />
-              <div className="bg-muted/50 aspect-video rounded-xl" />
-            </div>
-            <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
           </div>
         </SidebarInset>
       </SidebarProvider>

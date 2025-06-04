@@ -1,4 +1,5 @@
 import { Button } from "~/components/ui/button";
+import { Badge } from "~/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import {
   Table,
@@ -9,6 +10,36 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { Link } from "react-router";
+
+const getStatusVariant = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "in progress":
+      return "outline";
+    case "completed":
+      return "default";
+    case "blocked":
+      return "destructive";
+    case "todo":
+      return "secondary";
+    default:
+      return "default";
+  }
+};
+
+type VariantClassKey =
+  | "in progress"
+  | "completed"
+  | "blocked"
+  | "todo"
+  | "default";
+
+const variantClasses: Record<VariantClassKey, string> = {
+  "in progress": "bg-blue-50 text-blue-700 border border-blue-300",
+  completed: "bg-green-50 text-green-700 border border-green-300",
+  blocked: "bg-red-50 text-red-700 border border-red-300",
+  todo: "bg-gray-50 text-gray-700 border border-gray-300",
+  default: "bg-white text-gray-700 border border-gray-200",
+};
 
 export default function Dashboard() {
   // TODO: Replace with actual data fetching
@@ -25,15 +56,18 @@ export default function Dashboard() {
   return (
     <div className="container mx-auto pb-8">
       <h1 className="text-3xl font-bold">Dashboard</h1>
-      <div className="flex justify-between items-center mb-6">
-        <Link className="self-end" to="/tasks/new">
-          <Button>Create New Task</Button>
-        </Link>
+      <div className="grid auto-rows-min gap-4 md:grid-cols-3 my-6">
+        <div className="bg-muted/50 aspect-video rounded-xl" />
+        <div className="bg-muted/50 aspect-video rounded-xl" />
+        <div className="bg-muted/50 aspect-video rounded-xl" />
       </div>
 
       <Card>
-        <CardHeader>
+        <CardHeader className="flex items-center justify-between">
           <CardTitle>Active Tasks</CardTitle>
+          <Link className="self-end" to="/tasks/new">
+            <Button>Create New Task</Button>
+          </Link>
         </CardHeader>
         <CardContent>
           <Table>
@@ -50,7 +84,18 @@ export default function Dashboard() {
                 <TableRow key={task.id}>
                   <TableCell>{task.title}</TableCell>
                   <TableCell>{task.assignee}</TableCell>
-                  <TableCell>{task.status}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={getStatusVariant(task.status)}
+                      className={
+                        variantClasses[
+                          task.status.toLowerCase() as VariantClassKey
+                        ] || variantClasses.default
+                      }
+                    >
+                      {task.status}
+                    </Badge>
+                  </TableCell>
                   <TableCell className="text-right">
                     <Link to={`/tasks/${task.id}`}>
                       <Button variant="outline" size="sm">
