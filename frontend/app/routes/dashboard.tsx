@@ -45,7 +45,7 @@ type VariantClassKey =
 const variantClasses: Record<VariantClassKey, string> = {
   "in progress": "bg-blue-50 text-blue-700 border border-blue-300",
   completed: "bg-green-50 text-green-700 border border-green-300",
-  blocked: "bg-red-50 text-red-700 border border-red-300",
+  blocked: "bg-red-50 text-red-700 border border-red-300 dark:bg-red-50",
   todo: "bg-gray-50 text-gray-700 border border-gray-300",
   default: "bg-white text-gray-700 border border-gray-200",
 };
@@ -88,7 +88,7 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto">
-      <Card className="@container/card bg-gradient-to-br from-pink-100/20 via-background to-orange-100/20 border-none mb-4">
+      <Card className="@container/card bg-gradient-to-br from-pink-100/20 via-background to-orange-100/20 dark:from-pink-500/20 dark:to-orange-500/20 border-none mb-4">
         <CardHeader>
           <CardDescription className="flex items-center gap-2">
             <House className="h-4 w-4 text-primary" />

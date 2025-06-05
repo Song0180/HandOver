@@ -77,7 +77,7 @@ export default function NewTask() {
   }
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto">
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle>Create New Handover Task</CardTitle>
