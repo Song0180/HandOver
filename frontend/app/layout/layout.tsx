@@ -55,7 +55,13 @@ export default function Layout() {
             />
             <Breadcrumb>
               <BreadcrumbList>
-                {location.pathname !== "/" && getBreadcrumbs()}
+                {location.pathname == "/" ? (
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
+                  </BreadcrumbItem>
+                ) : (
+                  getBreadcrumbs()
+                )}
               </BreadcrumbList>
             </Breadcrumb>
             <div className="ml-auto flex items-center gap-2">

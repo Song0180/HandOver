@@ -14,6 +14,7 @@ import {
 import { Logo } from "~/components/ui/logo";
 import { NavUser } from "~/components/nav-user";
 import { Badge } from "~/components/ui/badge";
+import { useLocation } from "react-router";
 
 // This is sample data.
 const data = {
@@ -25,7 +26,10 @@ const data = {
         {
           title: "Dashboard",
           url: "/",
-          isActive: true,
+        },
+        {
+          title: "Tasks",
+          url: "/tasks",
         },
       ],
     },
@@ -40,6 +44,8 @@ const data = {
 const version = __APP_VERSION__;
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const location = useLocation();
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -58,7 +64,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={
+                        item.url === "/"
+                          ? location.pathname === "/"
+                          : location.pathname.startsWith(item.url)
+                      }
+                    >
                       <a href={item.url}>{item.title}</a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

@@ -41,7 +41,7 @@ const variantClasses: Record<VariantClassKey, string> = {
   default: "bg-white text-gray-700 border border-gray-200",
 };
 
-export default function Dashboard() {
+export default function Tasks() {
   // TODO: Replace with actual data fetching
   const tasks = [
     {
@@ -55,14 +55,6 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto pb-8">
-      <h1 className="text-3xl font-bold mb-4">Welcome, {}</h1>
-
-      <div className="grid auto-rows-min gap-4 md:grid-cols-3 mb-4">
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-      </div>
-
       <Card>
         <CardHeader className="flex items-center justify-between">
           <CardTitle>Active Tasks</CardTitle>
