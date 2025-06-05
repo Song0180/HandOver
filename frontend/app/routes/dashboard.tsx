@@ -18,13 +18,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { Link } from "react-router";
-import {
-  ArrowUpRight,
-  Handshake,
-  LoaderCircle,
-  Siren,
-  TrendingUp,
-} from "lucide-react";
+import { ArrowUpRight, Handshake, House, Siren } from "lucide-react";
 
 const getStatusVariant = (status: string) => {
   switch (status.toLowerCase()) {
@@ -58,7 +52,7 @@ const variantClasses: Record<VariantClassKey, string> = {
 
 export default function Dashboard() {
   // TODO: Replace with actual data fetching
-  const tasks = [
+  const createdTasks = [
     {
       id: "1",
       title: "Fix login bug",
@@ -66,33 +60,53 @@ export default function Dashboard() {
       status: "In Progress",
       links: ["JIRA-123", "DOC-456"],
     },
+    {
+      id: "2",
+      title: "Update API docs",
+      assignee: "Jane Smith",
+      status: "Todo",
+      links: ["DOC-789"],
+    },
+  ];
+
+  const assignedTasks = [
+    {
+      id: "3",
+      title: "Review PR #123",
+      assignee: "Current User",
+      status: "Todo",
+      links: ["PR-123"],
+    },
+    {
+      id: "4",
+      title: "Deploy hotfix",
+      assignee: "Current User",
+      status: "Blocked",
+      links: ["JIRA-456"],
+    },
   ];
 
   return (
-    <div className="container mx-auto pb-8">
-      <h1 className="text-3xl font-bold mb-4">Welcome, {}</h1>
+    <div className="container mx-auto">
+      <Card className="@container/card bg-gradient-to-br from-pink-100/20 via-background to-orange-100/20 border-none mb-4">
+        <CardHeader>
+          <CardDescription className="flex items-center gap-2">
+            <House className="h-4 w-4 text-primary" />
+            Good morning
+          </CardDescription>
+          <CardTitle className="text-2xl font-semibold tracking-tight @[250px]/card:text-3xl">
+            Welcome back, User
+          </CardTitle>
+        </CardHeader>
+        <CardFooter className="flex-col items-start gap-1.5 text-md">
+          <p>
+            Ready for your next leave? Create a handover task to keep things
+            moving smoothly.
+          </p>
+        </CardFooter>
+      </Card>
 
-      <div className="grid auto-rows-min gap-4 md:grid-cols-3 mb-4">
-        <Card className="@container/card">
-          <CardHeader>
-            <CardDescription>Tasks Assigned to You</CardDescription>
-            <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-              5
-            </CardTitle>
-            <CardAction>
-              <Badge variant="outline">
-                <LoaderCircle className="mr-1 animate-spin" />2 in progress
-              </Badge>
-            </CardAction>
-          </CardHeader>
-          <CardFooter className="flex-col items-start gap-1.5 text-sm">
-            <div className="line-clamp-1 flex gap-2 font-medium">
-              3 tasks pending review
-            </div>
-            <div className="text-muted-foreground">Updated just now</div>
-          </CardFooter>
-        </Card>
-
+      <div className="grid auto-rows-min gap-4 md:grid-cols-2 mb-4">
         <Card className="@container/card">
           <CardHeader>
             <CardDescription>Tasks Requiring Action</CardDescription>
@@ -136,56 +150,109 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      <Card>
-        <CardHeader className="flex items-center justify-between">
-          <CardTitle>Active Tasks</CardTitle>
-          <Link className="self-end" to="/tasks">
-            <Button>
-              <ArrowUpRight />
-              View All Tasks
-            </Button>
-          </Link>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Assignee</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {tasks.map((task) => (
-                <TableRow key={task.id}>
-                  <TableCell>{task.title}</TableCell>
-                  <TableCell>{task.assignee}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={getStatusVariant(task.status)}
-                      className={
-                        variantClasses[
-                          task.status.toLowerCase() as VariantClassKey
-                        ] || variantClasses.default
-                      }
-                    >
-                      {task.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Link to={`/tasks/${task.id}`}>
-                      <Button variant="outline" size="sm">
-                        View Details
-                      </Button>
-                    </Link>
-                  </TableCell>
+      <div className="grid gap-4 md:grid-cols-2 mb-4">
+        <Card>
+          <CardHeader className="flex items-center justify-between">
+            <CardTitle>Tasks Assigned to You</CardTitle>
+            <Link className="self-end" to="/tasks">
+              <Button size="sm">
+                <ArrowUpRight className="h-4 w-4 mr-2" />
+                View All
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Assignee</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {assignedTasks.map((task) => (
+                  <TableRow key={task.id}>
+                    <TableCell>{task.title}</TableCell>
+                    <TableCell>{task.assignee}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={getStatusVariant(task.status)}
+                        className={
+                          variantClasses[
+                            task.status.toLowerCase() as VariantClassKey
+                          ] || variantClasses.default
+                        }
+                      >
+                        {task.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Link to={`/tasks/${task.id}`}>
+                        <Button variant="outline" size="sm">
+                          View Details
+                        </Button>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex items-center justify-between">
+            <CardTitle>Tasks Created by You</CardTitle>
+            <Link className="self-end" to="/tasks">
+              <Button size="sm">
+                <ArrowUpRight className="h-4 w-4 mr-2" />
+                View All
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Assignee</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {createdTasks.map((task) => (
+                  <TableRow key={task.id}>
+                    <TableCell>{task.title}</TableCell>
+                    <TableCell>{task.assignee}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={getStatusVariant(task.status)}
+                        className={
+                          variantClasses[
+                            task.status.toLowerCase() as VariantClassKey
+                          ] || variantClasses.default
+                        }
+                      >
+                        {task.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Link to={`/tasks/${task.id}`}>
+                        <Button variant="outline" size="sm">
+                          View Details
+                        </Button>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

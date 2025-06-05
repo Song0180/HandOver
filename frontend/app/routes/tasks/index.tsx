@@ -56,16 +56,16 @@ export default function Tasks() {
 
   return (
     <div className="container mx-auto pb-8">
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-3xl font-bold">Active Tasks</h1>
+        <Link className="ml-auto" to="/tasks/new">
+          <Button>
+            <Plus />
+            Create New Task
+          </Button>
+        </Link>
+      </div>
       <Card>
-        <CardHeader className="flex items-center justify-between">
-          <CardTitle>Active Tasks</CardTitle>
-          <Link className="self-end" to="/tasks/new">
-            <Button>
-              <Plus />
-              Create New Task
-            </Button>
-          </Link>
-        </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>

@@ -231,7 +231,14 @@ export default function NewTask() {
               </div>
 
               <div className="flex justify-end space-x-4">
-                <Button variant="outline" onClick={() => navigate("/")}>
+                <Button
+                  type="button" // Explicitly set type to "button"
+                  variant="outline"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/tasks");
+                  }}
+                >
                   Cancel
                 </Button>
                 <Button type="submit">
