@@ -17,17 +17,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { z } from "zod";
 import { useNavigate } from "react-router";
+import { Plus, Sparkles, X } from "lucide-react";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  links: z.string().min(1, "At least one link is required"),
+  links: z
+    .array(
+      z.object({
+        url: z.string().min(1, "Link is required"),
+      }),
+    )
+    .min(1, "At least one link is required"),
   description: z.string().min(1, "Description is required"),
   assignee: z.string().min(1, "Assignee is required"),
-  contacts: z.string().optional(),
+  contacts: z
+    .array(
+      z.object({
+        name: z.string().min(1, "Contact name is required"),
+      }),
+    )
+    .optional(),
 });
 
 export default function NewTask() {
@@ -36,17 +49,31 @@ export default function NewTask() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      links: "",
+      links: [{ url: "" }],
       description: "",
       assignee: "",
-      contacts: "",
+      contacts: [],
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "links",
+  });
+
+  const {
+    fields: contactFields,
+    append: appendContact,
+    remove: removeContact,
+  } = useFieldArray({
+    control: form.control,
+    name: "contacts",
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // TODO: Implement API call to create task
     console.log(values);
-    navigate("/");
+    navigate("/tasks");
   }
 
   return (
@@ -74,23 +101,6 @@ export default function NewTask() {
 
               <FormField
                 control={form.control}
-                name="links"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Links</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter Jira ticket or Confluence page URLs"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>
@@ -106,6 +116,51 @@ export default function NewTask() {
                   </FormItem>
                 )}
               />
+
+              <div className="space-y-4">
+                <FormLabel>Links</FormLabel>
+
+                {fields.map((field, index) => (
+                  <FormField
+                    key={field.id}
+                    control={form.control}
+                    name={`links.${index}.url`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <div className="flex gap-2">
+                            <Input
+                              placeholder="Enter URL for Jira ticket, Pull Request, or Confluence page"
+                              {...field}
+                            />
+                            {index > 0 && (
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="icon"
+                                onClick={() => remove(index)}
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                ))}
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => append({ url: "" })}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Link
+                </Button>
+              </div>
 
               <FormField
                 control={form.control}
@@ -132,28 +187,57 @@ export default function NewTask() {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="contacts"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Additional Contacts (Optional)</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter PMs or stakeholders"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="space-y-4">
+                <FormLabel>Additional Contacts (Optional)</FormLabel>
+
+                {contactFields.map((field, index) => (
+                  <FormField
+                    key={field.id}
+                    control={form.control}
+                    name={`contacts.${index}.name`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <div className="flex gap-2">
+                            <Input
+                              placeholder="Enter contact name or role (e.g. John - PM)"
+                              {...field}
+                            />
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="icon"
+                              onClick={() => removeContact(index)}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                ))}
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => appendContact({ name: "" })}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Contact
+                </Button>
+              </div>
 
               <div className="flex justify-end space-x-4">
                 <Button variant="outline" onClick={() => navigate("/")}>
                   Cancel
                 </Button>
-                <Button type="submit">Create Task</Button>
+                <Button type="submit">
+                  <Sparkles />
+                  Create Task
+                </Button>
               </div>
             </form>
           </Form>

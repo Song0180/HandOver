@@ -38,8 +38,8 @@ export default function TaskDetail() {
     <div className="container mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">{task.title}</h1>
-        <Button variant="outline" onClick={() => navigate("/")}>
-          Back to Dashboard
+        <Button variant="outline" onClick={() => navigate("/tasks")}>
+          Back to Tasks
         </Button>
       </div>
 

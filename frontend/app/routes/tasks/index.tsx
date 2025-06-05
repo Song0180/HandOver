@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { Link } from "react-router";
+import { Plus } from "lucide-react";
 
 const getStatusVariant = (status: string) => {
   switch (status.toLowerCase()) {
@@ -59,7 +60,10 @@ export default function Tasks() {
         <CardHeader className="flex items-center justify-between">
           <CardTitle>Active Tasks</CardTitle>
           <Link className="self-end" to="/tasks/new">
-            <Button>Create New Task</Button>
+            <Button>
+              <Plus />
+              Create New Task
+            </Button>
           </Link>
         </CardHeader>
         <CardContent>
