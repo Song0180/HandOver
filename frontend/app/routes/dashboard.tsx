@@ -1,6 +1,14 @@
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+  CardAction,
+} from "~/components/ui/card";
 import {
   Table,
   TableBody,
@@ -10,6 +18,13 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { Link } from "react-router";
+import {
+  ArrowUpRight,
+  Handshake,
+  LoaderCircle,
+  Siren,
+  TrendingUp,
+} from "lucide-react";
 
 const getStatusVariant = (status: string) => {
   switch (status.toLowerCase()) {
@@ -58,16 +73,77 @@ export default function Dashboard() {
       <h1 className="text-3xl font-bold mb-4">Welcome, {}</h1>
 
       <div className="grid auto-rows-min gap-4 md:grid-cols-3 mb-4">
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
-        <div className="bg-muted/50 aspect-video rounded-xl" />
+        <Card className="@container/card">
+          <CardHeader>
+            <CardDescription>Tasks Assigned to You</CardDescription>
+            <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+              5
+            </CardTitle>
+            <CardAction>
+              <Badge variant="outline">
+                <LoaderCircle className="mr-1 animate-spin" />2 in progress
+              </Badge>
+            </CardAction>
+          </CardHeader>
+          <CardFooter className="flex-col items-start gap-1.5 text-sm">
+            <div className="line-clamp-1 flex gap-2 font-medium">
+              3 tasks pending review
+            </div>
+            <div className="text-muted-foreground">Updated just now</div>
+          </CardFooter>
+        </Card>
+
+        <Card className="@container/card">
+          <CardHeader>
+            <CardDescription>Tasks Requiring Action</CardDescription>
+            <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+              3
+            </CardTitle>
+            <CardAction>
+              <Badge variant="outline" className="text-destructive">
+                <Siren />
+                Needs attention
+              </Badge>
+            </CardAction>
+          </CardHeader>
+          <CardFooter className="flex-col items-start gap-1.5 text-sm">
+            <div className="line-clamp-1 flex gap-2 font-medium">
+              Tasks blocked or waiting review
+            </div>
+            <div className="text-muted-foreground">2 blockers identified</div>
+          </CardFooter>
+        </Card>
+
+        <Card className="@container/card">
+          <CardHeader>
+            <CardDescription>Total Active Tasks</CardDescription>
+            <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+              12
+            </CardTitle>
+            <CardAction>
+              <Badge variant="outline">
+                <Handshake />
+                Team-wide
+              </Badge>
+            </CardAction>
+          </CardHeader>
+          <CardFooter className="flex-col items-start gap-1.5 text-sm">
+            <div className="line-clamp-1 flex gap-2 font-medium">
+              Across all team members
+            </div>
+            <div className="text-muted-foreground">4 teams involved</div>
+          </CardFooter>
+        </Card>
       </div>
 
       <Card>
         <CardHeader className="flex items-center justify-between">
           <CardTitle>Active Tasks</CardTitle>
-          <Link className="self-end" to="/tasks/new">
-            <Button>Create New Task</Button>
+          <Link className="self-end" to="/tasks">
+            <Button>
+              <ArrowUpRight />
+              View All Tasks
+            </Button>
           </Link>
         </CardHeader>
         <CardContent>
