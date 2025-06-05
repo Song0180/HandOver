@@ -57,7 +57,7 @@ export default function Layout() {
               <BreadcrumbList>
                 {location.pathname == "/" ? (
                   <BreadcrumbItem>
-                    <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
+                    <BreadcrumbPage>Dashboard</BreadcrumbPage>
                   </BreadcrumbItem>
                 ) : (
                   getBreadcrumbs()

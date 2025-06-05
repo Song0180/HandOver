@@ -35,9 +35,9 @@ const data = {
     },
   ],
   user: {
-    name: "John Doe",
+    name: "Example User",
     email: "",
-    avatar: "https://i.pravatar.cc/150?img=3",
+    avatar: "https://i.pravatar.cc/150?img=5",
   },
 };
 
