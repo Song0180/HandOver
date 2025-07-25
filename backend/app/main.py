@@ -1,7 +1,10 @@
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.routes import api_router
+
+logging.getLogger('passlib').setLevel(logging.ERROR)
 
 app = FastAPI()
 

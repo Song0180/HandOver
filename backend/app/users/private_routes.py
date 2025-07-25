@@ -11,25 +11,41 @@ from app.users.models import (
     User,
     UserPublic,
 )
+from app.users.constants import (
+    EMAIL_MAX_LENGTH,
+    NAME_MAX_LENGTH,
+    PASSWORD_MIN_LENGTH,
+    PASSWORD_MAX_LENGTH,
+)
 
 router = APIRouter(tags=["private"], prefix="/private")
 
 
 class PrivateUserCreate(BaseModel):
-    email: EmailStr = Field(..., description="Valid email address")
+    email: EmailStr = Field(
+        ..., max_length=EMAIL_MAX_LENGTH, description="Valid email address"
+    )
     password: str = Field(
-        ..., min_length=8, max_length=40, description="Password must be 8-40 characters"
+        ...,
+        min_length=PASSWORD_MIN_LENGTH,
+        max_length=PASSWORD_MAX_LENGTH,
+        description="Password must be 8-40 characters",
     )
     full_name: str = Field(
-        ..., min_length=1, max_length=255, description="Full name is required"
+        ...,
+        min_length=1,
+        max_length=NAME_MAX_LENGTH,
+        description="Full name is required",
     )
     is_verified: bool = False
 
     @field_validator("password")
     @classmethod
     def validate_password(cls, v: str) -> str:
-        if len(v) < 8:
-            raise ValueError("Password must be at least 8 characters long")
+        if len(v) < PASSWORD_MIN_LENGTH:
+            raise ValueError(
+                f"Password must be at least {PASSWORD_MIN_LENGTH} characters long"
+            )
         if not re.search(r"[A-Z]", v):
             raise ValueError("Password must contain at least one uppercase letter")
         if not re.search(r"[a-z]", v):
