@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
+from app.routes import api_router
 
 app = FastAPI()
 
@@ -20,6 +21,4 @@ app.add_middleware(
 print("haha", settings.SQLALCHEMY_DATABASE_URI)
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+app.include_router(api_router, prefix=settings.API_V1_STR)

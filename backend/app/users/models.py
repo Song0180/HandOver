@@ -32,6 +32,11 @@ class UserUpdateMe(SQLModel):
     email: EmailStr | None = Field(default=None, max_length=255)
 
 
+class NewPassword(SQLModel):
+    token: str
+    new_password: str = Field(min_length=8, max_length=40)
+
+
 class UpdatePassword(SQLModel):
     current_password: str = Field(min_length=8, max_length=40)
     new_password: str = Field(min_length=8, max_length=40)
@@ -42,15 +47,10 @@ class User(UserBase, table=True):
     hashed_password: str
 
 
-class Token(SQLModel):
-    access_token: str
-    token_type: str = "bearer"
+class UserPublic(UserBase):
+    id: uuid.UUID
 
 
-class TokenPayload(SQLModel):
-    sub: str | None = None
-
-
-class NewPassword(SQLModel):
-    token: str
-    new_password: str = Field(min_length=8, max_length=40)
+class UsersPublic(SQLModel):
+    data: list[UserPublic]
+    count: int

@@ -1,6 +1,6 @@
 from sqlmodel import Session
-from app.users.model import User
-from app.users.repository import get_user_by_email
+from app.users.models import User
+from app.users.service import get_user_by_email
 from app.auth.utils import verify_password
 
 
