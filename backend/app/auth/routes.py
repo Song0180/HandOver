@@ -7,10 +7,17 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.auth.dependencies import CurrentUser, SessionDep
 from app.core.config import settings
 from app.core.models import Message
-from app.users.models import NewPassword, UserPublic
+from app.users.models import NewPassword, UserPublic, User
 
-from app.auth.models import Token
-from app.auth.service import authenticate, get_user_by_email
+from app.auth.models import Token, RefreshTokenRequest
+from app.auth.service import (
+    authenticate, 
+    get_user_by_email, 
+    create_refresh_token_for_user,
+    get_refresh_token,
+    revoke_refresh_token,
+    revoke_all_user_refresh_tokens
+)
 from app.auth.utils import (
     get_password_hash,
     create_access_token,
@@ -41,8 +48,13 @@ def login_access_token(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive user"
         )
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(user.id, expires_delta=access_token_expires)
+    
+    refresh_token = create_refresh_token_for_user(session=session, user_id=user.id)
+    
     return Token(
-        access_token=create_access_token(user.id, expires_delta=access_token_expires)
+        access_token=access_token,
+        refresh_token=refresh_token.token
     )
 
 
@@ -79,6 +91,66 @@ def reset_password(session: SessionDep, body: NewPassword) -> Message:
     session.add(user)
     session.commit()
     return Message(message="Password updated successfully")
+
+
+@router.post("/refresh-token")
+def refresh_token(session: SessionDep, request: RefreshTokenRequest) -> Token:
+    """
+    Exchange refresh token for new access token and refresh token
+    """
+    token_data = get_refresh_token(session=session, token=request.refresh_token)
+    if not token_data:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired refresh token",
+        )
+    
+    user = session.get(User, token_data.user_id)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+    elif not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="Inactive user"
+        )
+    
+    revoke_refresh_token(session=session, token=request.refresh_token)
+    
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(user.id, expires_delta=access_token_expires)
+    
+    new_refresh_token = create_refresh_token_for_user(session=session, user_id=user.id)
+    
+    return Token(
+        access_token=access_token,
+        refresh_token=new_refresh_token.token
+    )
+
+
+@router.post("/logout")
+def logout(session: SessionDep, request: RefreshTokenRequest) -> Message:
+    """
+    Logout by revoking refresh token
+    """
+    success = revoke_refresh_token(session=session, token=request.refresh_token)
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid refresh token",
+        )
+    return Message(message="Successfully logged out")
+
+
+@router.post("/revoke-all-tokens")
+def revoke_all_tokens(session: SessionDep, current_user: CurrentUser) -> Message:
+    """
+    Revoke all refresh tokens for current user (security measure)
+    """
+    count = revoke_all_user_refresh_tokens(session=session, user_id=current_user.id)
+    return Message(message=f"Revoked {count} refresh tokens")
 
 
 # @router.post("/password-recovery/{email}")

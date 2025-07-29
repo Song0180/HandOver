@@ -14,6 +14,12 @@ class Settings(BaseSettings):
 
     FRONTEND_HOST: str = "http://localhost:5173"
     ENVIRONMENT: Literal["local", "staging", "production"] = "local"
+    
+    # JWT Configuration
+    SECRET_KEY: str = "your-secret-key-change-in-production"  # Should be set via environment variable
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60  # 1 hour
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 30  # 30 days
+    EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48  # 48 hours
 
     POSTGRES_SERVER: str
     POSTGRES_PORT: int = 5432
