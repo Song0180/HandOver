@@ -7,6 +7,7 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
+  index("./routes/login/index.tsx"),
   layout("./layout/layout.tsx", [
     index("./routes/dashboard.tsx"),
     ...prefix("tasks", [
