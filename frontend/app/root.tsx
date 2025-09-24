@@ -9,6 +9,7 @@ import {
 
 console.log("Root");
 console.log(import.meta.env.VITE_API_URL);
+console.log("Holy niubi");
 
 import type { Route } from "./+types/root";
 import "./app.css";
