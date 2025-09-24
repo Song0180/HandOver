@@ -8,6 +8,7 @@ import {
 } from "react-router";
 
 console.log("Root");
+console.log(import.meta.env.VITE_API_URL);
 
 import type { Route } from "./+types/root";
 import "./app.css";
