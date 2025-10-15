@@ -1,13 +1,11 @@
-import { Skeleton } from "~/components/ui/skeleton";
+import { Loader } from "lucide-react";
+import { Logo } from "./ui/logo";
 
 export function Loading() {
   return (
-    <div className="flex flex-col space-y-3">
-      <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-      <div className="space-y-2">
-        <Skeleton className="h-4 w-[250px]" />
-        <Skeleton className="h-4 w-[200px]" />
-      </div>
+    <div className="container mx-auto flex flex-col items-center justify-center min-h-svh">
+      <Logo />
+      <Loader className="animate-spin" />
     </div>
   );
 }

@@ -7,13 +7,15 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
-  index("./routes/login/index.tsx"),
-  layout("./layout/layout.tsx", [
-    index("./routes/dashboard.tsx"),
-    ...prefix("tasks", [
-      index("./routes/tasks/index.tsx"),
-      route("new", "./routes/tasks/new.tsx"),
-      route(":id", "./routes/tasks/[id].tsx"),
+  layout("./layout/root-layout.tsx", [
+    index("./routes/login/index.tsx"),
+    layout("./layout/main-layout.tsx", [
+      index("./routes/dashboard.tsx"),
+      ...prefix("tasks", [
+        index("./routes/tasks/index.tsx"),
+        route("new", "./routes/tasks/new.tsx"),
+        route(":id", "./routes/tasks/[id].tsx"),
+      ]),
     ]),
   ]),
 ] satisfies RouteConfig;

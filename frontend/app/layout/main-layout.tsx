@@ -1,6 +1,5 @@
 import { Outlet, useLocation } from "react-router";
 
-import { ThemeProvider } from "~/components/theme-provider";
 import {
   SidebarInset,
   SidebarProvider,
@@ -18,7 +17,7 @@ import {
 } from "~/components/ui/breadcrumb";
 import { ModeToggle } from "~/components/mode-toggle";
 
-export default function Layout() {
+export default function MainLayout() {
   const location = useLocation();
 
   const getBreadcrumbs = () => {
@@ -43,40 +42,38 @@ export default function Layout() {
   };
 
   return (
-    <ThemeProvider defaultTheme="system" storageKey="handover-theme">
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 sticky top-0 z-10 bg-background">
-            <SidebarTrigger className="-ml-1" />
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 sticky top-0 z-10 bg-background">
+          <SidebarTrigger className="-ml-1" />
+          <Separator
+            orientation="vertical"
+            className="mr-2 data-[orientation=vertical]:h-4"
+          />
+          <Breadcrumb>
+            <BreadcrumbList>
+              {location.pathname == "/" ? (
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Dashboard</BreadcrumbPage>
+                </BreadcrumbItem>
+              ) : (
+                getBreadcrumbs()
+              )}
+            </BreadcrumbList>
+          </Breadcrumb>
+          <div className="ml-auto flex items-center gap-2">
             <Separator
               orientation="vertical"
-              className="mr-2 data-[orientation=vertical]:h-4"
+              className="mx-2 data-[orientation=vertical]:h-4"
             />
-            <Breadcrumb>
-              <BreadcrumbList>
-                {location.pathname == "/" ? (
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>Dashboard</BreadcrumbPage>
-                  </BreadcrumbItem>
-                ) : (
-                  getBreadcrumbs()
-                )}
-              </BreadcrumbList>
-            </Breadcrumb>
-            <div className="ml-auto flex items-center gap-2">
-              <Separator
-                orientation="vertical"
-                className="mx-2 data-[orientation=vertical]:h-4"
-              />
-              <ModeToggle />
-            </div>
-          </header>
-          <div className="flex flex-1 flex-col gap-4 p-4">
-            <Outlet />
+            <ModeToggle />
           </div>
-        </SidebarInset>
-      </SidebarProvider>
-    </ThemeProvider>
+        </header>
+        <div className="flex flex-1 flex-col gap-4 p-4">
+          <Outlet />
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
