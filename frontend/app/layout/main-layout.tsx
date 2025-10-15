@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router";
 
 import {
   SidebarInset,
@@ -40,6 +40,13 @@ export default function MainLayout() {
       );
     });
   };
+
+  const navigate = useNavigate();
+
+  // TODO: redirect user to login page if not authenticated
+  setTimeout(() => {
+    navigate("/login");
+  }, 2000);
 
   return (
     <SidebarProvider>

@@ -8,7 +8,7 @@ import {
 
 export default [
   layout("./layout/root-layout.tsx", [
-    index("./routes/login/index.tsx"),
+    route("login", "./routes/login/index.tsx"),
     layout("./layout/main-layout.tsx", [
       index("./routes/dashboard.tsx"),
       ...prefix("tasks", [
